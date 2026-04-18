@@ -1,0 +1,29 @@
+resources:
+  jobs:
+    uber-etl-job:
+      name: uber-etl-job
+
+      trigger:
+        periodic:
+          interval: 1
+          unit: DAYS
+
+      #email_notifications:
+      #  on_failure:
+      #    - your_email@example.com
+
+      parameters:
+        - name: catalog
+          default: ${var.catalog}
+        - name: schema
+          default: ${var.schema}
+
+      tasks:
+        - task_key: refresh_pipeline
+          pipeline_task:
+            pipeline_id: ${resources.pipelines.uber_ride_etl_pipeline_etl.id}
+
+      environments:
+        - environment_key: default
+          spec:
+            environment_version: "4"
